@@ -25,15 +25,21 @@ public class CanteenTest {
     }
 
     @Test
-    public void testCanteenHomePage() {
-        File file = new File("src/main/resources/index.html");
+    public void testCanteenCartFunctionality() {
+        // Load local page
+        File file = new File("src/main/java/com/example/index.html");
         driver.get(file.toURI().toString());
 
-        String title = driver.getTitle();
-        Assert.assertEquals(title, "Campus Canteen Portal", "Page title does not match!");
+        // 1. Verify title
+        Assert.assertEquals(driver.getTitle(), "Campus Canteen Portal");
 
-        WebElement orderButton = driver.findElement(By.id("orderBtn"));
-        Assert.assertTrue(orderButton.isDisplayed(), "Order button is missing!");
+        // 2. Find the first "Add" button (for Masala Chai) and click it
+        WebElement addButton = driver.findElement(By.xpath("//button[text()='Add']"));
+        addButton.click();
+
+        // 3. Verify total price updates to 20
+        WebElement totalPrice = driver.findElement(By.id("totalPrice"));
+        Assert.assertEquals(totalPrice.getText(), "20", "Cart total calculation failed!");
     }
 
     @AfterMethod
