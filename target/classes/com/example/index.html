@@ -4,35 +4,125 @@
     <meta charset="UTF-8">
     <title>Campus Canteen Portal</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #ff6b6b; }
-        .main-container { display: flex; justify-content: space-around; max-width: 900px; margin: 0 auto; gap: 20px; }
-        .menu, .cart { background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); width: 45%; }
-        .item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        button { background-color: #28a745; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
-        button:hover { background-color: #218838; }
-        .total-section { font-weight: bold; margin-top: 15px; font-size: 18px; text-align: right; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #18181b 0%, #27272a 100%); 
+            color: #f4f4f5;
+            margin: 0; 
+            padding: 40px; 
+            min-height: 100vh;
+        }
+        h1 { 
+            text-align: center; 
+            color: #fb923c; 
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .main-container { 
+            display: flex; 
+            justify-content: center; 
+            max-width: 950px; 
+            margin: 0 auto; 
+            gap: 30px; 
+        }
+        .menu, .cart { 
+            background: #202024; 
+            border: 1px solid #3f3f46;
+            padding: 25px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); 
+            width: 45%; 
+        }
+        h3 {
+            margin-top: 0;
+            border-bottom: 2px solid #fb923c;
+            padding-bottom: 12px;
+            color: #fb923c;
+            font-size: 1.25rem;
+        }
+        .item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 18px; 
+            padding-bottom: 12px; 
+            border-bottom: 1px solid #27272a; 
+        }
+        .item span {
+            font-size: 16px;
+            color: #e4e4e7;
+            font-weight: 500;
+        }
+        button.add-btn { 
+            background-color: #f97316; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        button.add-btn:hover { 
+            background-color: #ea580c; 
+            transform: translateY(-1px);
+        }
+        #cartItems {
+            padding-left: 20px;
+            color: #a1a1aa;
+            min-height: 60px;
+        }
+        #cartItems li {
+            margin-bottom: 8px;
+            color: #f4f4f5;
+            font-size: 15px;
+        }
+        .total-section { 
+            font-weight: bold; 
+            margin-top: 25px; 
+            font-size: 20px; 
+            text-align: right; 
+            color: #4ade80;
+            border-top: 2px dashed #3f3f46;
+            padding-top: 15px;
+        }
+        .action-btn {
+            width: 100%; 
+            margin-top: 12px; 
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: opacity 0.2s;
+        }
+        .action-btn:hover { opacity: 0.9; }
+        .checkout-btn { background-color: #22c55e; color: white; }
+        .clear-btn { background-color: #ef4444; color: white; }
     </style>
 </head>
 <body>
 
-    <h1>Campus QuickBites Canteen</h1>
+    <h1>🍔 Campus QuickBites Canteen</h1>
 
     <div class="main-container">
         <!-- Left Side: Menu -->
         <div class="menu">
             <h3>Menu</h3>
             <div class="item">
-                <span>Masala Chai - ₹20</span>
-                <button onclick="addItem('Masala Chai', 20)">Add</button>
+                <span>Orange Juice - ₹20</span>
+                <button class="add-btn" onclick="addItem('Orange Juice', 20)">Add</button>
             </div>
             <div class="item">
-                <span>Veg Burger - ₹60</span>
-                <button onclick="addItem('Veg Burger', 60)">Add</button>
+                <span>Super Burger(Veg) - ₹100</span>
+                <button class="add-btn" onclick="addItem('Super Burger(Veg)', 100)">Add</button>
             </div>
             <div class="item">
                 <span>Cheese Sandwich - ₹50</span>
-                <button onclick="addItem('Cheese Sandwich', 50)">Add</button>
+                <button class="add-btn" onclick="addItem('Cheese Sandwich', 50)">Add</button>
             </div>
         </div>
 
@@ -45,7 +135,8 @@
             <div class="total-section">
                 Total: ₹<span id="totalPrice">0</span>
             </div>
-            <button id="orderBtn" style="width:100%; margin-top:15px; background:#007bff;" onclick="alert('Order Placed Successfully!')">Checkout</button>
+            <button id="orderBtn" class="action-btn checkout-btn" onclick="alert('Order Placed Successfully!')">Checkout</button>
+            <button class="action-btn clear-btn" onclick="clearCart()">Clear Cart</button>
         </div>
     </div>
 
@@ -66,6 +157,13 @@
 
             total += price;
             totalPriceElem.innerText = total;
+        }
+
+        function clearCart() {
+            cartList.innerHTML = "<li>Cart is empty</li>";
+            total = 0;
+            totalPriceElem.innerText = total;
+            isFirstItem = true;
         }
     </script>
 </body>
